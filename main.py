@@ -18,14 +18,21 @@ ENTRY = (
     "would orbit again."
 )
 
+# The sealed gate: /output/entry.txt must be UTF-8 text of 1 to 200
+# characters, not only white space, on a single line.
+MAX_CHARS = 200
+
 
 def main() -> None:
-    assert 1 <= len(ENTRY) <= 200, f"entry is {len(ENTRY)} chars"
-    assert ENTRY.strip() == ENTRY
+    text = ENTRY.strip()
+    assert 1 <= len(text) <= MAX_CHARS, f"entry is {len(text)} chars"
+    assert "\n" not in text, "entry must be one line"
+    assert text == ENTRY, "entry must not gain or lose whitespace"
     out_dir = "/output"
     os.makedirs(out_dir, exist_ok=True)
     with open(os.path.join(out_dir, "entry.txt"), "w", encoding="utf-8") as f:
-        f.write(ENTRY)
+        f.write(text)
+    print(f"wrote {len(text)} chars to /output/entry.txt")
 
 
 if __name__ == "__main__":
